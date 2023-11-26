@@ -7,6 +7,12 @@ require('dotenv').config();
 const { MongoClient } = require("mongodb");
 const client = new MongoClient(process.env.URI);
 
+app.get('/', async (req, res) => {
+    return res.status(200).json({
+        "OK": "ok"
+    })
+})
+
 app.get('/api/tickets', async (req, res) => {
     try {
         
