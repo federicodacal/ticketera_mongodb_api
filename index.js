@@ -2,16 +2,14 @@ const express = require('express');
 const app = express();
 app.use(express.json());
 
+const cors = require("cors");
+
 require('dotenv').config();
 
 const { MongoClient } = require("mongodb");
 const client = new MongoClient(process.env.URI);
 
-app.get('/', async (req, res) => {
-    return res.status(200).json({
-        "OK": "ok"
-    })
-})
+app.use(cors());
 
 app.get('/api/tickets', async (req, res) => {
     try {
