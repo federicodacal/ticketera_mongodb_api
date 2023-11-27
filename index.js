@@ -6,21 +6,20 @@ const cors = require("cors");
 
 require('dotenv').config();
 
-const { MongoClient } = require("mongodb");
-const client = new MongoClient(process.env.URI);
+//const { MongoClient } = require("mongodb");
+//const client = new MongoClient(process.env.URI);
 
 app.use(cors());
+
+const Ticket = require('./models/ticketModel');
 
 app.get('/api/tickets', async (req, res) => {
     try {
         
-        const db = client.db('ticketera');
-        const tickets = db.collection('tickets');
-        
-        const data = await tickets.find().toArray();
+        const tickets = await Ticket.find();
 
         return res.status(200).json({
-            data
+            tickets
         })
     }
     catch(err) {
