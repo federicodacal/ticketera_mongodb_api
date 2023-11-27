@@ -15,6 +15,7 @@ connectDB();
 const Ticket = require('./models/ticketModel');
 const Hola = require('./models/holaModel');
 
+// GET - Traer tickets
 app.get('/api/tickets', async (req, res) => {
     try {
         
