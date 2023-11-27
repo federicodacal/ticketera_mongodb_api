@@ -13,14 +13,15 @@ const TicketModel = require('./models/ticketModel');
 app.get('/api/tickets', async (req, res) => {
     try {
         
+        /*
         const tickets = await TicketModel.find({
             msg: {
                 $type: "string"
             }
-        });
+        });*/
 
         return res.status(200).json({
-            tickets
+            msg: "Hola"
         })
     }
     catch(err) {
