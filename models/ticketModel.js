@@ -1,23 +1,26 @@
 const mongoose = require('mongoose');
-const { Schema } = mongoose.Schema;
+const { Schema } = mongoose;
 
-const GeoSchema = new Schema({
-    type: {
-        type: String,
-        default: "Point"
-    },
-    coordinates: {
-        type: [Number],
-        index: '2dsphere'
-    }
-});
-
-const ticketSchema = new Schema({
+/*
+const ticketSchema  = mongoose.Schema({
     cliente: {
         id: Number,
         nombre: String,
         apellido: String,
-        empleado: Boolean
+        empleado: Boolean,
+        plan: {
+            descripcion: String,
+            canales: [String],
+            precio: Number
+        },
+        localizacion: {
+            localidad: String,
+            codigo_postal: String,
+            geolocalizacion: {
+                type: String,
+                coordinates: [Number]
+            }
+        }
     },
     id_tramite: String,    
     fecha: Date,
@@ -29,10 +32,45 @@ const ticketSchema = new Schema({
             departamento: String
         }
     ],
-    despertectos: [String],
+    desperfectos: [String],
     tipo: String,
     resuelto: Boolean,
     operaciones: [String]
-});
+}); */
 
-module.exports = mongoose.model('Ticket', ticketSchema);
+const ticketSchema  = new Schema({
+    cliente: {
+        id: Number,
+        nombre: String,
+        apellido: String,
+        empleado: Boolean,
+        plan: {
+            descripcion: String,
+            canales: [String],
+            precio: Number
+        },
+        localizacion: {
+            localidad: String,
+            codigo_postal: String,
+            geolocalizacion: [Schema.Types.Mixed]
+        }
+    },
+    id_tramite: String,    
+    fecha: Date,
+    responsable: [
+        {
+            nombre: String,
+            apellido: String,
+            id_empleado: Number,
+            departamento: String
+        }
+    ],
+    desperfectos: [String],
+    tipo: String,
+    resuelto: Boolean,
+    operaciones: [String]
+}); 
+
+ticketSchema.index({localizacion: "2dsphere"});
+const Ticket = mongoose.model('Ticket', ticketSchema);
+module.exports = Ticket;

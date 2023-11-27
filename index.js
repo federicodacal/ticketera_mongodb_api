@@ -8,20 +8,36 @@ require('dotenv').config();
 
 app.use(cors());
 
-const TicketModel = require('./models/ticketModel');
+const connectDB = require('./connectMongo');
+
+connectDB();
+
+const Ticket = require('./models/ticketModel');
+const Hola = require('./models/holaModel');
 
 app.get('/api/tickets', async (req, res) => {
     try {
         
-        /*
-        const tickets = await TicketModel.find({
-            msg: {
-                $type: "string"
-            }
-        });*/
+        const tickets = await Ticket.find();
 
         return res.status(200).json({
-            msg: "Hola"
+            tickets
+        })
+    }
+    catch(err) {
+        return res.status(404).json({
+            msg: err.message
+        })
+    }
+})
+
+app.get('/api/hola', async (req, res) => {
+    try {
+        
+        const hola = await Hola.find();
+
+        return res.status(200).json({
+            hola
         })
     }
     catch(err) {
