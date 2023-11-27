@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const { Schema } = mongoose.Schema;
 
 const GeoSchema = new Schema({
     type: {
@@ -12,7 +12,7 @@ const GeoSchema = new Schema({
     }
 });
 
-const TicketSchema = new Schema({
+const ticketSchema = new Schema({
     cliente: {
         id: Number,
         nombre: String,
@@ -34,3 +34,5 @@ const TicketSchema = new Schema({
     resuelto: Boolean,
     operaciones: [String]
 });
+
+module.exports = mongoose.model('Ticket', ticketSchema);
