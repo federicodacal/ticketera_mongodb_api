@@ -15,7 +15,7 @@ connectDB();
 const Ticket = require('./models/ticketModel');
 const Hola = require('./models/holaModel');
 
-// GET - Traer tickets
+// GET: Traer tickets
 app.get('/api/tickets', async (req, res) => {
     try {
         
@@ -32,7 +32,6 @@ app.get('/api/tickets', async (req, res) => {
     }
 })
 
-// TRAER hgola
 app.get('/api/hola', async (req, res) => {
     try {
         
