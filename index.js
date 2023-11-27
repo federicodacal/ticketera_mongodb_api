@@ -13,7 +13,7 @@ const connectDB = require('./connectMongo');
 connectDB();
 
 const Ticket = require('./models/ticketModel');
-const Hola = require('./models/holaModel');
+const Usuario = require('./models/usuarioModel');
 
 // GET: Traer tickets
 app.get('/api/tickets', async (req, res) => {
@@ -32,13 +32,14 @@ app.get('/api/tickets', async (req, res) => {
     }
 })
 
-app.get('/api/hola', async (req, res) => {
+// GET: Traer usuarios
+app.get('/api/usuarios', async (req, res) => {
     try {
         
-        const hola = await Hola.find();
+        const users = await Usuario.find();
 
         return res.status(200).json({
-            hola
+            users
         })
     }
     catch(err) {
