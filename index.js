@@ -32,6 +32,7 @@ app.get('/api/tickets', async (req, res) => {
     }
 })
 
+// TRAER hgola
 app.get('/api/hola', async (req, res) => {
     try {
         
