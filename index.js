@@ -106,12 +106,12 @@ app.get('/api/planMayor900', async (req, res) => {
     }
 })
 
-// Operador $lt -> Usuarios con plan menor a $900
-app.get('/api/planMenor900', async (req, res) => {
+// Operador $lt -> Usuarios con plan menor a $550
+app.get('/api/planMenor550', async (req, res) => {
     try {
         
         const users = await Usuario.find({
-            "plan.precio": { $lt: 900 }
+            "plan.precio": { $lt: 550 }
         });
 
         return res.status(200).json({
@@ -125,7 +125,7 @@ app.get('/api/planMenor900', async (req, res) => {
     }
 })
 
-// Operador $lt -> Usuarios con plan menor o igual a $550
+// Operador $lte -> Usuarios con plan menor o igual a $550
 app.get('/api/planLte550', async (req, res) => {
     try {
         
@@ -144,6 +144,24 @@ app.get('/api/planLte550', async (req, res) => {
     }
 })
 
+// Operador $gte -> Usuarios con plan menor o igual a $550
+app.get('/api/ticketFechaGte', async (req, res) => {
+    try {
+        
+        const tickets = await Ticket.find({
+            fecha: { $gte: "2017-12-12T16:20:00.000+00:00" }
+        });
+
+        return res.status(200).json({
+            tickets
+        })
+    }
+    catch(err) {
+        return res.status(404).json({
+            msg: err.message
+        })
+    }
+})
 
 
 app.listen(8080, () => {
