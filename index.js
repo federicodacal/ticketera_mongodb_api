@@ -49,6 +49,45 @@ app.get('/api/usuarios', async (req, res) => {
     }
 })
 
+// Operador $eq -> Tickets resueltos
+app.get('/api/tickets_resueltos', async (req, res) => {
+    try {
+        
+        const tickets = await Ticket.find({
+            resuelto: true
+        });
+
+        return res.status(200).json({
+            tickets
+        })
+    }
+    catch(err) {
+        return res.status(404).json({
+            msg: err.message
+        })
+    }
+})
+
+// Operador $ne -> Tickets no resueltos
+app.get('/api/tickets_no_resueltos', async (req, res) => {
+    try {
+        
+        const tickets = await Ticket.find({
+            resuelto: { $ne: true }
+        });
+
+        return res.status(200).json({
+            tickets
+        })
+    }
+    catch(err) {
+        return res.status(404).json({
+            msg: err.message
+        })
+    }
+})
+
+
 app.listen(8080, () => {
     console.log('Server running on port 8080');
 })
