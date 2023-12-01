@@ -88,7 +88,7 @@ app.get('/api/tickets_no_resueltos', async (req, res) => {
 })
 
 // Operador $gt -> Usuarios con plan mayor a $900
-app.get('/api/plan', async (req, res) => {
+app.get('/api/planMayor900', async (req, res) => {
     try {
         
         const users = await Usuario.find({
@@ -107,7 +107,7 @@ app.get('/api/plan', async (req, res) => {
 })
 
 // Operador $lt -> Usuarios con plan menor a $900
-app.get('/api/plan_menor_a_900', async (req, res) => {
+app.get('/api/planMenor900', async (req, res) => {
     try {
         
         const users = await Usuario.find({
@@ -126,7 +126,7 @@ app.get('/api/plan_menor_a_900', async (req, res) => {
 })
 
 // Operador $lt -> Usuarios con plan menor o igual a $550
-app.get('/api/plan_lte_550', async (req, res) => {
+app.get('/api/planLte550', async (req, res) => {
     try {
         
         const users = await Usuario.find({
