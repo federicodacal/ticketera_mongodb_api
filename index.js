@@ -144,7 +144,7 @@ app.get('/api/planLte550', async (req, res) => {
     }
 })
 
-// Operador $gte -> Usuarios con plan menor o igual a $550
+// Operador $gte -> Tickets con fecha mayor a 2017-12-12
 app.get('/api/ticketFechaGte', async (req, res) => {
     try {
         
@@ -163,6 +163,43 @@ app.get('/api/ticketFechaGte', async (req, res) => {
     }
 })
 
+// Operador $in -> Tickets con fecha entre 2014-01-01 y 2017-12-12
+app.get('/api/ticketFechaIn', async (req, res) => {
+    try {
+        
+        const tickets = await Ticket.find({
+            fecha: { $in: ["2014-01-01T16:20:00.000+00:00", "2017-12-12T16:20:00.000+00:00"] }
+        });
+
+        return res.status(200).json({
+            tickets
+        })
+    }
+    catch(err) {
+        return res.status(404).json({
+            msg: err.message
+        })
+    }
+})
+
+// Operador $nin -> Tickets con fecha NO entre 2014-01-01 y 2017-12-12
+app.get('/api/ticketFechaIn', async (req, res) => {
+    try {
+        
+        const tickets = await Ticket.find({
+            fecha: { $nin: ["2014-01-01T16:20:00.000+00:00", "2017-12-12T16:20:00.000+00:00"] }
+        });
+
+        return res.status(200).json({
+            tickets
+        })
+    }
+    catch(err) {
+        return res.status(404).json({
+            msg: err.message
+        })
+    }
+})
 
 app.listen(8080, () => {
     console.log('Server running on port 8080');
