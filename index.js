@@ -163,12 +163,12 @@ app.get('/api/ticketFechaGte', async (req, res) => {
     }
 })
 
-// Operador $in -> Tickets con fecha entre 2014-01-01 y 2017-12-12
-app.get('/api/ticketFechaIn', async (req, res) => {
+// Operador $in -> Tickets con tipo Alta o Cambio de Plan
+app.get('/api/ticketTipoIn', async (req, res) => {
     try {
         
         const tickets = await Ticket.find({
-            fecha: { $in: ["2014-01-01T16:20:00.000+00:00", "2017-12-12T16:20:00.000+00:00"] }
+            tipo: { $in: ["Alta", "Cambio de plan"] }
         });
 
         return res.status(200).json({
@@ -182,12 +182,12 @@ app.get('/api/ticketFechaIn', async (req, res) => {
     }
 })
 
-// Operador $nin -> Tickets con fecha NO entre 2014-01-01 y 2017-12-12
-app.get('/api/ticketFechaIn', async (req, res) => {
+// Operador $nin -> Tickets con tipo NO Alta o Cambio de Plan
+app.get('/api/ticketTipoNin', async (req, res) => {
     try {
         
         const tickets = await Ticket.find({
-            fecha: { $nin: ["2014-01-01T16:20:00.000+00:00", "2017-12-12T16:20:00.000+00:00"] }
+            fecha: { $nin: ["Alta", "Cambio de Plan"] }
         });
 
         return res.status(200).json({
