@@ -182,12 +182,31 @@ app.get('/api/ticketTipoIn', async (req, res) => {
     }
 })
 
-// Operador $nin -> Tickets con tipo NO Alta o Cambio de Plan
-app.get('/api/ticketTipoNin', async (req, res) => {
+// Operador $nin -> Usuarios NO en Avellaneda y Quilmes
+app.get('/api/usuarioLocalidadNin', async (req, res) => {
+    try {
+        
+        const users = await Usuario.find({
+            "localizacion.localidad": { $nin: ["Avellaneda", "Quilmes"] }
+        });
+
+        return res.status(200).json({
+            users
+        })
+    }
+    catch(err) {
+        return res.status(404).json({
+            msg: err.message
+        })
+    }
+})
+
+// Operador $or -> Tickets con tipo "Desperfecto" o "Cambio de plan"
+app.get('/api/ticketsTipoOr', async (req, res) => {
     try {
         
         const tickets = await Ticket.find({
-            fecha: { $nin: ["Alta", "Cambio de Plan"] }
+            $or: [ {tipo: "Desperfecto"}, {tipo: "Cambio de plan"} ] 
         });
 
         return res.status(200).json({
@@ -200,6 +219,66 @@ app.get('/api/ticketTipoNin', async (req, res) => {
         })
     }
 })
+
+// Operador $and -> Tickets con tipo "Desperfecto" y localidad Avellaneda
+app.get('/api/ticketsTipoAnd', async (req, res) => {
+    try {
+        
+        const tickets = await Ticket.find({
+            $and: [ {tipo: "Desperfecto"}, {"cliente.localizacion.localidad": "Avellaneda"} ] 
+        });
+
+        return res.status(200).json({
+            tickets
+        })
+    }
+    catch(err) {
+        return res.status(404).json({
+            msg: err.message
+        })
+    }
+})
+
+// Operador $nor -> Ticketos NO de Avellaneda y NO resuelto 
+app.get('/api/ticketsNor', async (req, res) => {
+    try {
+        
+        const tickets = await Ticket.find({
+            $nor: [ {resuelto: true}, {"cliente.localizacion.localidad": "Avellaneda"} ] 
+        });
+
+        return res.status(200).json({
+            tickets
+        })
+    }
+    catch(err) {
+        return res.status(404).json({
+            msg: err.message
+        })
+    }
+})
+
+// Operador $not -> Tickets que NO tienen "Baja" en operaciones
+app.get('/api/ticketsNotBaja', async (req, res) => {
+    try {
+        
+        const tickets = await Ticket.find({
+            $not: { operaciones: "Baja" }
+        });
+
+        return res.status(200).json({
+            tickets
+        })
+    }
+    catch(err) {
+        return res.status(404).json({
+            msg: err.message
+        })
+    }
+})
+
+// Text index
+
 
 app.listen(8080, () => {
     console.log('Server running on port 8080');
