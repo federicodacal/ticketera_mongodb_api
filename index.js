@@ -88,7 +88,7 @@ app.get('/api/tickets_no_resueltos', async (req, res) => {
 })
 
 // Operador $gt -> Usuarios con plan mayor a $900
-app.get('/api/plan_mayor_a_900', async (req, res) => {
+app.get('/api/plan', async (req, res) => {
     try {
         
         const users = await Usuario.find({
@@ -130,7 +130,7 @@ app.get('/api/plan_lte_550', async (req, res) => {
     try {
         
         const users = await Usuario.find({
-            "plan.precio": { $lt: 550 }
+            "plan.precio": { $lte: 550 }
         });
 
         return res.status(200).json({
