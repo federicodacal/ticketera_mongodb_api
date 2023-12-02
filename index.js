@@ -50,7 +50,7 @@ app.get('/api/usuarios', async (req, res) => {
 })
 
 // Operador $eq -> Tickets resueltos
-app.get('/api/tickets_resueltos', async (req, res) => {
+app.get('/api/ticketsResueltos', async (req, res) => {
     try {
         
         const tickets = await Ticket.find({
@@ -69,7 +69,7 @@ app.get('/api/tickets_resueltos', async (req, res) => {
 })
 
 // Operador $ne -> Tickets no resueltos
-app.get('/api/tickets_no_resueltos', async (req, res) => {
+app.get('/api/ticketsNoResueltos', async (req, res) => {
     try {
         
         const tickets = await Ticket.find({
@@ -145,7 +145,7 @@ app.get('/api/planLte550', async (req, res) => {
 })
 
 // Operador $gte -> Tickets con fecha mayor a 2017-12-12
-app.get('/api/ticketFechaGte', async (req, res) => {
+app.get('/api/ticketsFechaGte', async (req, res) => {
     try {
         
         const tickets = await Ticket.find({
@@ -164,7 +164,7 @@ app.get('/api/ticketFechaGte', async (req, res) => {
 })
 
 // Operador $in -> Tickets con tipo Alta o Cambio de Plan
-app.get('/api/ticketTipoIn', async (req, res) => {
+app.get('/api/ticketsTipoIn', async (req, res) => {
     try {
         
         const tickets = await Ticket.find({
@@ -239,7 +239,7 @@ app.get('/api/ticketsTipoAnd', async (req, res) => {
     }
 })
 
-// Operador $nor -> Ticketos NO de Avellaneda y NO resuelto 
+// Operador $nor -> Tickets NO de Avellaneda y NO resuelto 
 app.get('/api/ticketsNor', async (req, res) => {
     try {
         
@@ -263,7 +263,7 @@ app.get('/api/ticketsNotBaja', async (req, res) => {
     try {
         
         const tickets = await Ticket.find({
-            $not: { operaciones: "Baja" }
+            operaciones: { $not: "Baja" }
         });
 
         return res.status(200).json({
@@ -277,7 +277,52 @@ app.get('/api/ticketsNotBaja', async (req, res) => {
     }
 })
 
-// Text index
+// Operador $text, $search -> Usuarios con nombre "Juan"
+app.get('/api/usuariosJuan', async (req, res) => {
+    try {
+        
+        const usuarios = await Usuario.find({
+            $text: { $search: "Juan" }
+        });
+
+        return res.status(200).json({
+            usuarios
+        })
+    }
+    catch(err) {
+        return res.status(404).json({
+            msg: err.message
+        })
+    }
+})
+
+// $near 
+
+// $geoWithin
+
+// $geoIntersect
+
+// lookout
+
+// $exists
+
+// $type
+
+// $all
+
+// $elemMatch
+
+// $size
+
+// $sortByCount
+
+// $unwid
+
+// $project
+
+// $expr
+
+// $match
 
 
 app.listen(8080, () => {
