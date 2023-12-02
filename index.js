@@ -518,12 +518,12 @@ app.get('/api/ticketsService', async (req, res) => {
     }
 })
 
-// Operador $size -> Usuarios con plan de más de 6 canales
+// Operador $size -> Usuarios con plan de 6 canales
 app.get('/api/canalesSize', async (req, res) => {
     try {
         
         const data = await Usuario.find({
-            "plan.canales": { $gt: { $size: 6 } }
+            "plan.canales": { $size: 6 } 
           });
 
         return res.status(200).json({
