@@ -14,6 +14,7 @@ connectDB();
 
 const Ticket = require('./models/ticketModel');
 const Usuario = require('./models/usuarioModel');
+const { trusted } = require('mongoose');
 
 // GET: Traer tickets
 app.get('/api/tickets', async (req, res) => {
@@ -281,12 +282,12 @@ app.get('/api/ticketsNotBaja', async (req, res) => {
 app.get('/api/usuariosJuan', async (req, res) => {
     try {
         
-        const usuarios = await Usuario.find({
+        const users = await Usuario.find({
             $text: { $search: "Juan" }
         });
 
         return res.status(200).json({
-            usuarios
+            users
         })
     }
     catch(err) {
@@ -300,7 +301,7 @@ app.get('/api/usuariosJuan', async (req, res) => {
 app.get('/api/near', async (req, res) => {
     try {
         
-        const usuarios = await Usuario.find({
+        const users = await Usuario.find({
             "localizacion.geolocalizacion": {
                 $near: {
                     $geometry: { 
@@ -310,14 +311,14 @@ app.get('/api/near', async (req, res) => {
                             -34.66253120682271
                         ] 
                     },
-                    $minDistance: 5000,
+                    $minDistance: 1,
                     $maxDistance: 5000
                 }
             }
         });
 
         return res.status(200).json({
-            usuarios
+            users
         })
     }
     catch(err) {
@@ -327,13 +328,13 @@ app.get('/api/near', async (req, res) => {
     }
 })
 
-// $geoWithin
+// Operador $geoWithin -> Localidad de Avellenada y cercanos
 app.get('/api/geoWithin', async (req, res) => {
     try {
         
-        const usuarios = await Usuario.find({
+        const users = await Usuario.find({
             "localizacion.geolocalizacion": {
-                $near: {
+                $geoWithin: {
                     $geometry: { 
                         type: "Polygon",
                         coordinates: [
@@ -378,7 +379,7 @@ app.get('/api/geoWithin', async (req, res) => {
         });
 
         return res.status(200).json({
-            usuarios
+            users
         })
     }
     catch(err) {
@@ -388,29 +389,319 @@ app.get('/api/geoWithin', async (req, res) => {
     }
 })
 
-// $geoIntersect
+// Operador $geoIntersect -> Usuarios frente Plaza Alsina
+app.get('/api/geoIntersects', async (req, res) => {
+    try {
+        
+        const users = await Usuario.find({
+            "localizacion.geolocalizacion": {
+                $geoIntersects: {
+                    $geometry: { 
+                        type: "Polygon",
+                        coordinates: [
+                            [
+                                [
+                                  -58.36524304134903,
+                                  -34.66208885232607
+                                ],
+                                [
+                                  -58.36524304134903,
+                                  -34.662906760155096
+                                ],
+                                [
+                                  -58.36434065271186,
+                                  -34.662906760155096
+                                ],
+                                [
+                                  -58.36434065271186,
+                                  -34.66208885232607
+                                ],
+                                [
+                                  -58.36524304134903,
+                                  -34.66208885232607
+                                ]
+                              ]
+                          ],
+                    }
+                }
+            }
+        });
 
-// lookout
+        return res.status(200).json({
+            users
+        })
+    }
+    catch(err) {
+        return res.status(404).json({
+            msg: err.message
+        })
+    }
+})
 
-// $exists
+// Operador $exists -> Tickets que tiene descripcion de desperfecto
+app.get('/api/ticketDesperfecto', async (req, res) => {
+    try {
+        
+        const tickets = await Ticket.find({
+            "desperfectos.descripcion": { $exists: true, $ne: "" }
+        });
 
-// $type
+        return res.status(200).json({
+            tickets
+        })
+    }
+    catch(err) {
+        return res.status(404).json({
+            msg: err.message
+        })
+    }
+})
 
-// $all
+// Operador $type -> codigo postal tipo string
+app.get('/api/type', async (req, res) => {
+    try {
+        
+        const users = await Usuario.find({
+            "localizacion.codigo_postal": { $type: "string" }
+        });
 
-// $elemMatch
+        return res.status(200).json({
+            users
+        })
+    }
+    catch(err) {
+        return res.status(404).json({
+            msg: err.message
+        })
+    }
+})
 
-// $size
+// Operador $all -> Usuarios con canales "ESPN" y "ESPN 2"
+app.get('/api/canalesAll', async (req, res) => {
+    try {
+        
+        const users = await Usuario.find({
+            "plan.canales": { $all: [ "ESPN", "ESPN 2"] }
+        });
 
-// $sortByCount
+        return res.status(200).json({
+            users
+        })
+    }
+    catch(err) {
+        return res.status(404).json({
+            msg: err.message
+        })
+    }
+})
 
-// $unwid
+// Operador $elemMatch -> Tickets con responsable de Service
+app.get('/api/ticketsService', async (req, res) => {
+    try {
+        
+        const tickets = await Ticket.find({
+            responsable: {
+              $elemMatch: {
+                "departamento": "Service"
+              }
+            }
+          });
 
-// $project
+        return res.status(200).json({
+            tickets
+        })
+    }
+    catch(err) {
+        return res.status(404).json({
+            msg: err.message
+        })
+    }
+})
 
-// $expr
+// Operador $size -> Usuarios con plan de más de 6 canales
+app.get('/api/canalesSize', async (req, res) => {
+    try {
+        
+        const users = await Usuario.find({
+            "plan.canales": { $gt: { $size: 6 } }
+          });
 
-// $match
+        return res.status(200).json({
+            users
+        })
+    }
+    catch(err) {
+        return res.status(404).json({
+            msg: err.message
+        })
+    }
+})
+
+// Operador $sortByCount, $unwind, $match -> Canales de Pack Deportes
+app.get('/api/canalesDeportes', async (req, res) => {
+    try {
+        
+        const canales = await Usuario.aggregate([
+            {
+                $match: {
+                    "plan.descripcion": "Deportes"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$plan.canales"
+                }
+            },
+            {
+                $sortByCount: "$plan.canales"
+            }
+        ])
+
+        return res.status(200).json({
+            canales
+        })
+    }
+    catch(err) {
+        return res.status(404).json({
+            msg: err.message
+        })
+    }
+})
+
+// Operadores $project, $unwind, $match, $group -> Desperfectos por tipo, localidad y cantidad
+app.get('/api/desperfectos', async (req, res) => {
+    try {
+        
+        const data = await Ticket.aggregate([
+            {
+                $unwind: "$desperfectos" 
+            },
+            {
+                $group: {
+                    _id: "$desperfectos.descripcion",
+                    lugares: { $addToSet: "$cliente.localizacion.localidad" },
+                    ocurrencias: { $sum: 1 } 
+                }
+            },
+            {
+                $project: {
+                    desperfecto: "$_id",
+                    lugares: 1,
+                    ocurrencias: 1,
+                    _id: 0
+                }
+            }
+        ])
+
+        return res.status(200).json({
+            data
+        })
+    }
+    catch(err) {
+        return res.status(404).json({
+            msg: err.message
+        })
+    }
+})
+
+// $lookup, $unwind, $match, $project -> Clientes que son empleados
+app.get('/api/clientesEmpleados', async (req, res) => {
+    try {
+        
+        const data = await Ticket.aggregate([
+            {
+                $lookup: {
+                    from: "usuarios",
+                    localField: "cliente.apellido",
+                    foreignField: "apellido",
+                    as: "clienteData"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$clienteData"
+                }
+            }, 
+            {
+                $match: {
+                    "clienteData.empleado": true
+                }
+            }, 
+            {
+                $project: {
+                    "nombre_cl": "$clienteData.nombre",
+                    "apellido_cl": "$clienteData.apellido",
+                    "id_cl": "$clienteData.id",
+                    "_id": 0
+                }
+            }
+        ])
+
+        return res.status(200).json({
+            data
+        })
+    }
+    catch(err) {
+        return res.status(404).json({
+            msg: err.message
+        })
+    }
+})
+
+// Operador $expr -> Usuarios con más de 2 tickets
+app.get('/api/userExpr', async (req, res) => {
+    try {
+        
+        const data = await Usuario.find({
+            $expr: {
+                $gt: [ { $size: "$tickets" }, 2 ]
+            }
+        })
+
+        return res.status(200).json({
+            data
+        })
+    }
+    catch(err) {
+        return res.status(404).json({
+            msg: err.message
+        })
+    }
+})
+
+// Operadores $unwind, $group, $project -> Ocurreciones por empleado
+app.get('/api/empleados', async (req, res) => {
+    try {
+        
+        const data = await Ticket.aggregate([
+            {
+                $unwind: "$responsable" 
+            },
+            {
+                $group: {
+                    _id: "$responsable.id_empleado",
+                    ocurrencias: { $sum: 1 } 
+                }
+            },
+            {
+                $project: {
+                    id: "$_id",
+                    ocurrencias: 1,
+                    _id: 0
+                }
+            }
+        ])
+
+        return res.status(200).json({
+            data
+        })
+    }
+    catch(err) {
+        return res.status(404).json({
+            msg: err.message
+        })
+    }
+})
 
 
 app.listen(8080, () => {

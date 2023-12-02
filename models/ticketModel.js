@@ -34,6 +34,6 @@ const ticketSchema  = new Schema({
     operaciones: [String]
 }); 
 
-ticketSchema.index({localizacion: "2dsphere"});
+ticketSchema.index({"localizacion.geolocalizacion.coordinates": "2dsphere"});
 const Ticket = mongoose.model('Ticket', ticketSchema);
 module.exports = Ticket;

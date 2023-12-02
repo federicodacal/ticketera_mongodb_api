@@ -20,6 +20,6 @@ const usuarioSchema  = new Schema({
     tickets: [Schema.Types.Mixed]
 }); 
 
-usuarioSchema.index({"localizacion.geolocalizacion": "2dsphere"});
+usuarioSchema.index({"localizacion.geolocalizacion.coordinates": "2dsphere"});
 const Usuario = mongoose.model('Usuario', usuarioSchema);
 module.exports = Usuario;
