@@ -296,9 +296,97 @@ app.get('/api/usuariosJuan', async (req, res) => {
     }
 })
 
-// $near 
+// Operador $near -> Usuarios cerca de UTN-FRA 
+app.get('/api/near', async (req, res) => {
+    try {
+        
+        const usuarios = await Usuario.find({
+            "localizacion.geolocalizacion": {
+                $near: {
+                    $geometry: { 
+                        type: "Point",
+                        coordinates: [
+                            -58.36474503826432,
+                            -34.66253120682271
+                        ] 
+                    },
+                    $minDistance: 5000,
+                    $maxDistance: 5000
+                }
+            }
+        });
+
+        return res.status(200).json({
+            usuarios
+        })
+    }
+    catch(err) {
+        return res.status(404).json({
+            msg: err.message
+        })
+    }
+})
 
 // $geoWithin
+app.get('/api/geoWithin', async (req, res) => {
+    try {
+        
+        const usuarios = await Usuario.find({
+            "localizacion.geolocalizacion": {
+                $near: {
+                    $geometry: { 
+                        type: "Polygon",
+                        coordinates: [
+                            [
+                              [
+                                -58.36675657102998,
+                                -34.65315188615764
+                              ],
+                              [
+                                -58.372576737477175,
+                                -34.658093904185336
+                              ],
+                              [
+                                -58.381025366191025,
+                                -34.66890354122316
+                              ],
+                              [
+                                -58.39247795178092,
+                                -34.70209575032251
+                              ],
+                              [
+                                -58.351736786649525,
+                                -34.71058464279308
+                              ],
+                              [
+                                -58.312122105347015,
+                                -34.690981701889214
+                              ],
+                              [
+                                -58.35474074352561,
+                                -34.64666504031982
+                              ],
+                              [
+                                -58.36675657102998,
+                                -34.65315188615764
+                              ]
+                            ]
+                        ] 
+                    }
+                }
+            }
+        });
+
+        return res.status(200).json({
+            usuarios
+        })
+    }
+    catch(err) {
+        return res.status(404).json({
+            msg: err.message
+        })
+    }
+})
 
 // $geoIntersect
 
