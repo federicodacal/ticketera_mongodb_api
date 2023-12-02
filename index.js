@@ -20,10 +20,10 @@ const { trusted } = require('mongoose');
 app.get('/api/tickets', async (req, res) => {
     try {
         
-        const tickets = await Ticket.find();
+        const data = await Ticket.find();
 
         return res.status(200).json({
-            tickets
+            data
         })
     }
     catch(err) {
@@ -37,10 +37,10 @@ app.get('/api/tickets', async (req, res) => {
 app.get('/api/usuarios', async (req, res) => {
     try {
         
-        const users = await Usuario.find();
+        const data = await Usuario.find();
 
         return res.status(200).json({
-            users
+            data
         })
     }
     catch(err) {
@@ -54,12 +54,12 @@ app.get('/api/usuarios', async (req, res) => {
 app.get('/api/ticketsResueltos', async (req, res) => {
     try {
         
-        const tickets = await Ticket.find({
+        const data = await Ticket.find({
             resuelto: true
         });
 
         return res.status(200).json({
-            tickets
+            data
         })
     }
     catch(err) {
@@ -73,12 +73,12 @@ app.get('/api/ticketsResueltos', async (req, res) => {
 app.get('/api/ticketsNoResueltos', async (req, res) => {
     try {
         
-        const tickets = await Ticket.find({
+        const data = await Ticket.find({
             resuelto: { $ne: true }
         });
 
         return res.status(200).json({
-            tickets
+            data
         })
     }
     catch(err) {
@@ -92,12 +92,12 @@ app.get('/api/ticketsNoResueltos', async (req, res) => {
 app.get('/api/planMayor900', async (req, res) => {
     try {
         
-        const users = await Usuario.find({
+        const data = await Usuario.find({
             "plan.precio": { $gt: 900 }
         });
 
         return res.status(200).json({
-            users
+            data
         })
     }
     catch(err) {
@@ -111,12 +111,12 @@ app.get('/api/planMayor900', async (req, res) => {
 app.get('/api/planMenor550', async (req, res) => {
     try {
         
-        const users = await Usuario.find({
+        const data = await Usuario.find({
             "plan.precio": { $lt: 550 }
         });
 
         return res.status(200).json({
-            users
+            data
         })
     }
     catch(err) {
@@ -130,12 +130,12 @@ app.get('/api/planMenor550', async (req, res) => {
 app.get('/api/planLte550', async (req, res) => {
     try {
         
-        const users = await Usuario.find({
+        const data = await Usuario.find({
             "plan.precio": { $lte: 550 }
         });
 
         return res.status(200).json({
-            users
+            data
         })
     }
     catch(err) {
@@ -149,12 +149,12 @@ app.get('/api/planLte550', async (req, res) => {
 app.get('/api/ticketsFechaGte', async (req, res) => {
     try {
         
-        const tickets = await Ticket.find({
+        const data = await Ticket.find({
             fecha: { $gte: "2017-12-12T16:20:00.000+00:00" }
         });
 
         return res.status(200).json({
-            tickets
+            data
         })
     }
     catch(err) {
@@ -168,12 +168,12 @@ app.get('/api/ticketsFechaGte', async (req, res) => {
 app.get('/api/ticketsTipoIn', async (req, res) => {
     try {
         
-        const tickets = await Ticket.find({
+        const data = await Ticket.find({
             tipo: { $in: ["Alta", "Cambio de plan"] }
         });
 
         return res.status(200).json({
-            tickets
+            data
         })
     }
     catch(err) {
@@ -187,12 +187,12 @@ app.get('/api/ticketsTipoIn', async (req, res) => {
 app.get('/api/usuarioLocalidadNin', async (req, res) => {
     try {
         
-        const users = await Usuario.find({
+        const data = await Usuario.find({
             "localizacion.localidad": { $nin: ["Avellaneda", "Quilmes"] }
         });
 
         return res.status(200).json({
-            users
+            data
         })
     }
     catch(err) {
@@ -206,12 +206,12 @@ app.get('/api/usuarioLocalidadNin', async (req, res) => {
 app.get('/api/ticketsTipoOr', async (req, res) => {
     try {
         
-        const tickets = await Ticket.find({
+        const data = await Ticket.find({
             $or: [ {tipo: "Desperfecto"}, {tipo: "Cambio de plan"} ] 
         });
 
         return res.status(200).json({
-            tickets
+            data
         })
     }
     catch(err) {
@@ -225,12 +225,12 @@ app.get('/api/ticketsTipoOr', async (req, res) => {
 app.get('/api/ticketsTipoAnd', async (req, res) => {
     try {
         
-        const tickets = await Ticket.find({
+        const data = await Ticket.find({
             $and: [ {tipo: "Desperfecto"}, {"cliente.localizacion.localidad": "Avellaneda"} ] 
         });
 
         return res.status(200).json({
-            tickets
+            data
         })
     }
     catch(err) {
@@ -244,12 +244,12 @@ app.get('/api/ticketsTipoAnd', async (req, res) => {
 app.get('/api/ticketsNor', async (req, res) => {
     try {
         
-        const tickets = await Ticket.find({
+        const data = await Ticket.find({
             $nor: [ {resuelto: true}, {"cliente.localizacion.localidad": "Avellaneda"} ] 
         });
 
         return res.status(200).json({
-            tickets
+            data
         })
     }
     catch(err) {
@@ -263,12 +263,12 @@ app.get('/api/ticketsNor', async (req, res) => {
 app.get('/api/ticketsNotBaja', async (req, res) => {
     try {
         
-        const tickets = await Ticket.find({
+        const data = await Ticket.find({
             operaciones: { $not: { $eq: "Baja" } }
         });
 
         return res.status(200).json({
-            tickets
+            data
         })
     }
     catch(err) {
@@ -282,12 +282,12 @@ app.get('/api/ticketsNotBaja', async (req, res) => {
 app.get('/api/usuariosJuan', async (req, res) => {
     try {
         
-        const users = await Usuario.find({
+        const data = await Usuario.find({
             $text: { $search: "Juan" }
         });
 
         return res.status(200).json({
-            users
+            data
         })
     }
     catch(err) {
@@ -301,7 +301,7 @@ app.get('/api/usuariosJuan', async (req, res) => {
 app.get('/api/near', async (req, res) => {
     try {
         
-        const users = await Usuario.find({
+        const data = await Usuario.find({
             "localizacion.geolocalizacion": {
                 $near: {
                     $geometry: { 
@@ -318,7 +318,7 @@ app.get('/api/near', async (req, res) => {
         });
 
         return res.status(200).json({
-            users
+            data
         })
     }
     catch(err) {
@@ -332,7 +332,7 @@ app.get('/api/near', async (req, res) => {
 app.get('/api/geoWithin', async (req, res) => {
     try {
         
-        const users = await Usuario.find({
+        const data = await Usuario.find({
             "localizacion.geolocalizacion": {
                 $geoWithin: {
                     $geometry: { 
@@ -379,7 +379,7 @@ app.get('/api/geoWithin', async (req, res) => {
         });
 
         return res.status(200).json({
-            users
+            data
         })
     }
     catch(err) {
@@ -393,7 +393,7 @@ app.get('/api/geoWithin', async (req, res) => {
 app.get('/api/geoIntersects', async (req, res) => {
     try {
         
-        const users = await Usuario.find({
+        const data = await Usuario.find({
             "localizacion.geolocalizacion": {
                 $geoIntersects: {
                     $geometry: { 
@@ -428,7 +428,7 @@ app.get('/api/geoIntersects', async (req, res) => {
         });
 
         return res.status(200).json({
-            users
+            data
         })
     }
     catch(err) {
@@ -442,12 +442,12 @@ app.get('/api/geoIntersects', async (req, res) => {
 app.get('/api/ticketDesperfecto', async (req, res) => {
     try {
         
-        const tickets = await Ticket.find({
+        const data = await Ticket.find({
             "desperfectos.descripcion": { $exists: true, $ne: "" }
         });
 
         return res.status(200).json({
-            tickets
+            data
         })
     }
     catch(err) {
@@ -461,12 +461,12 @@ app.get('/api/ticketDesperfecto', async (req, res) => {
 app.get('/api/type', async (req, res) => {
     try {
         
-        const users = await Usuario.find({
+        const data = await Usuario.find({
             "localizacion.codigo_postal": { $type: "string" }
         });
 
         return res.status(200).json({
-            users
+            data
         })
     }
     catch(err) {
@@ -480,12 +480,12 @@ app.get('/api/type', async (req, res) => {
 app.get('/api/canalesAll', async (req, res) => {
     try {
         
-        const users = await Usuario.find({
+        const data = await Usuario.find({
             "plan.canales": { $all: [ "ESPN", "ESPN 2"] }
         });
 
         return res.status(200).json({
-            users
+            data
         })
     }
     catch(err) {
@@ -499,7 +499,7 @@ app.get('/api/canalesAll', async (req, res) => {
 app.get('/api/ticketsService', async (req, res) => {
     try {
         
-        const tickets = await Ticket.find({
+        const data = await Ticket.find({
             responsable: {
               $elemMatch: {
                 "departamento": "Service"
@@ -508,7 +508,7 @@ app.get('/api/ticketsService', async (req, res) => {
           });
 
         return res.status(200).json({
-            tickets
+            data
         })
     }
     catch(err) {
@@ -522,12 +522,12 @@ app.get('/api/ticketsService', async (req, res) => {
 app.get('/api/canalesSize', async (req, res) => {
     try {
         
-        const users = await Usuario.find({
+        const data = await Usuario.find({
             "plan.canales": { $gt: { $size: 6 } }
           });
 
         return res.status(200).json({
-            users
+            data
         })
     }
     catch(err) {
@@ -537,11 +537,11 @@ app.get('/api/canalesSize', async (req, res) => {
     }
 })
 
-// Operador $sortByCount, $unwind, $match -> Canales de Pack Deportes
+// Operador $sortByCount, $unwind, $match -> Canales de plan Deportes
 app.get('/api/canalesDeportes', async (req, res) => {
     try {
         
-        const canales = await Usuario.aggregate([
+        const data = await Usuario.aggregate([
             {
                 $match: {
                     "plan.descripcion": "Deportes"
@@ -558,7 +558,7 @@ app.get('/api/canalesDeportes', async (req, res) => {
         ])
 
         return res.status(200).json({
-            canales
+            data
         })
     }
     catch(err) {
