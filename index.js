@@ -263,7 +263,7 @@ app.get('/api/ticketsNotBaja', async (req, res) => {
     try {
         
         const tickets = await Ticket.find({
-            operaciones: { $not: "Baja" }
+            operaciones: { $not: { $eq: "Baja" } }
         });
 
         return res.status(200).json({
